@@ -9,7 +9,7 @@ def main():
     # Creating a greyscale image
     grey_image = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
     # Normalizing the image
-    normalized_image = cv2.normalize(grey_image, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8UC1)
+    normalized_image = cv2.normalize(grey_image, None, 0, 255, cv2.NORM_MINMAX)
     
     # Finding contours
     contours, _ = cv2.findContours(normalized_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
