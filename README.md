@@ -2,6 +2,5 @@
 A project to obtain and interpret Spectroscopy data from ELISA.
 
 # To Do - 
-* Blob Extraction
-* Color info extraction.
+* Plot HSV graph for individual contours.
 * Reduce image processing time.

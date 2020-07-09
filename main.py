@@ -6,6 +6,8 @@ def main():
     # Reading the original image
     image_name = "1.jpg"
     src_image = cv2.imread(image_name)
+    # Creating a HSV Image
+    hsv_image = cv2.cvtColor(src_image, cv2.COLOR_BGR2HSV)
     # Creating a greyscale image
     grey_image = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
     # Normalizing the image
@@ -17,9 +19,24 @@ def main():
     
     # Finding contours
     contours, _ = cv2.findContours(dilate_morph_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    # Drawing the bouding area
-    image_with_boxes = cv2.drawContours(src_image, contours, -1, (255, 255, 255), 2)
+    
+    # Drawing the bouding area and extracting HSV values
+    hsv_values = [None for i in range(len(contours))]
+    for i, c in enumerate(contours):
+        x, y, w, h = cv2.boundingRect(c)
+        image_with_boxes = (cv2.rectangle(src_image, (x, y), (x + w, y + h), 
+                            (0, 255, 0), 2))
+        hsv_contour = [None for i in range(0, h)]
+        contour_counter = 0
+        for idx in range(h):
+            hsv_contour[contour_counter] = hsv_image[y + idx][int(x + (w / 2))]
+            # Only use the following line for verification
+            # src_image[y + idx][int(x + (w / 2))] = [255, 255, 255]
+            contour_counter += 1
+        hsv_values[i] = hsv_contour
+    
     output_image = image_with_boxes
+    
     # Adding the number of contours to the text
     output_image = (cv2.putText(output_image, 'Number of Contours Detected is ' 
                     + str(len(contours)), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
@@ -27,7 +44,7 @@ def main():
     
     # Displaying the image 
     cv2.imshow("Output", output_image)
-    
+    print(hsv_values)
     
 if __name__ == "__main__":
     main()
