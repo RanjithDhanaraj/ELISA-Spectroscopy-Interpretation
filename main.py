@@ -3,11 +3,12 @@
 # Import libraries.
 import cv2
 import numpy as np
+from matplotlib import pyplot as plt
 
 # Defining main function.
 def main():
     # Reading the original image.
-    image_name = "1.jpg"
+    image_name = "2.jpg"
     src_image = cv2.imread(image_name)
     # Creating a HSV Image.
     hsv_image = cv2.cvtColor(src_image, cv2.COLOR_BGR2HSV)
@@ -28,6 +29,7 @@ def main():
     
     # Drawing the bouding area and extracting HSV values.
     hsv_values = [None for i in range(len(contours))]
+    
     # Cycling through all the contours.
     for i, c in enumerate(contours):
         # Obtaining the x, y co-ordinates along with width and height.
@@ -46,7 +48,11 @@ def main():
             hsv_contour[idx] = hsv_image[y + idx][int(x + (w / 2))]
             # Only use the following line for verification.
             # src_image[y + idx][int(x + (w / 2))] = [255, 255, 255]
+        
         hsv_values[i] = hsv_contour
+        image_with_boxes = (cv2.putText(image_with_boxes, 'Contour ' + str(i), 
+                            (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, 
+                            (255, 255, 255), 1, cv2.LINE_AA))  
     
     output_image = image_with_boxes
     
@@ -58,8 +64,24 @@ def main():
     # Displaying the image.
     cv2.imshow("Output", output_image)
     # Debug line, not necessary.
-    print(len(hsv_values[2]))
+    # print(hsv_values)
     
+    hsv_values = np.array(hsv_values)
+    # Plotting HSV value graph
+    for i in range(8):
+        plt.subplot(4, 2, i+1)
+        plt.ylabel('Brightness')
+        plt.xlabel('Position (Top to Bottom)')
+        plt.title('Contour' + str(i))
+        hsv_values[i] = np.array(hsv_values[i])
+        # Verification
+        # print(hsv_values[i][:, 2])
+        # print("\n\n\n\n")
+        plt.plot(range(len(hsv_values[i][:, 2])), hsv_values[i][:, 2])
+        
+    plt.tight_layout()
+    plt.show()
+
 # Checking if this is the main execution file. If true then execute the main 
 # function else exit.
 if __name__ == "__main__":
