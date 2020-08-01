@@ -66,6 +66,7 @@ def main():
     # Debug line, not necessary.
     # print(hsv_values)
     
+	# Converting ourer list to an array.
     hsv_values = np.array(hsv_values)
     # Plotting HSV value graph
     for i in range(8):
@@ -73,13 +74,19 @@ def main():
         plt.ylabel('Brightness')
         plt.xlabel('Position (Top to Bottom)')
         plt.title('Contour' + str(i))
+		# Converting inner list to an array.
         hsv_values[i] = np.array(hsv_values[i])
-        # Verification
+       
+		# Plotting Brightness on y axis and position on x axis.
+        plt.plot(range(len(hsv_values[i][:, 2])), hsv_values[i][:, 2])
+		
+		# Only use the following line for Value Verification.
         # print(hsv_values[i][:, 2])
         # print("\n\n\n\n")
-        plt.plot(range(len(hsv_values[i][:, 2])), hsv_values[i][:, 2])
         
-    plt.tight_layout()
+    # Auto padding 
+	plt.tight_layout()
+	# Display plots.
     plt.show()
 
 # Checking if this is the main execution file. If true then execute the main 
