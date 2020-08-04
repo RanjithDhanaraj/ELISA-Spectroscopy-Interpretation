@@ -4,6 +4,7 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from mpldatacursor import datacursor
 
 # Defining main function.
 def main():
@@ -50,7 +51,7 @@ def main():
             # src_image[y + idx][int(x + (w / 2))] = [255, 255, 255]
         
         hsv_values[i] = hsv_contour
-        image_with_boxes = (cv2.putText(image_with_boxes, 'Contour ' + str(i), 
+        image_with_boxes = (cv2.putText(image_with_boxes, 'Contour ' + str(i+1), 
                             (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, 
                             (255, 255, 255), 1, cv2.LINE_AA))  
     
@@ -66,27 +67,34 @@ def main():
     # Debug line, not necessary.
     # print(hsv_values)
     
-	# Converting ourer list to an array.
+    # Converting ourer list to an array.
     hsv_values = np.array(hsv_values)
     # Plotting HSV value graph
+    plt.ylabel('Brightness')
+    plt.xlabel('Position (Top to Bottom)')
     for i in range(8):
-        plt.subplot(4, 2, i+1)
-        plt.ylabel('Brightness')
-        plt.xlabel('Position (Top to Bottom)')
-        plt.title('Contour' + str(i))
-		# Converting inner list to an array.
+        # Converting inner list to an array.
         hsv_values[i] = np.array(hsv_values[i])
        
-		# Plotting Brightness on y axis and position on x axis.
-        plt.plot(range(len(hsv_values[i][:, 2])), hsv_values[i][:, 2])
-		
-		# Only use the following line for Value Verification.
+        # Plotting Brightness on y axis and position on x axis.
+        plt.plot(range(len(hsv_values[i][:, 2])), hsv_values[i][:, 2], 
+                            label = 'Contour '+str(i+1))
+        
+        # Setting Max limit for Y-axis
+        plt.ylim(0, max(hsv_values[i][:, 2]) + 20)  
+                		
+        # Only use the following line for Value Verification.
         # print(hsv_values[i][:, 2])
         # print("\n\n\n\n")
-        
+    
+    # Adding Legend
+    plt.legend(loc = 'upper left', bbox_to_anchor = (1.04, 1))
     # Auto padding 
-	plt.tight_layout()
-	# Display plots.
+    plt.tight_layout()
+    # Adding cursor selection
+    datacursor(display='multiple', draggable=True, 
+                formatter='Brightness:{y:.2f}\n Position:{x:.2f}\n{label}'.format)
+    # Display plots.
     plt.show()
 
 # Checking if this is the main execution file. If true then execute the main 
